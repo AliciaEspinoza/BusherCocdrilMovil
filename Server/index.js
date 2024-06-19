@@ -2,9 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const getDateAndTime = require('./utils/date/date_info');
 dotenv.config();
 
-const ConnectMongoDB = require('./db/db_config');
+const connectMongoDB = require('./db/db_config');
+const router = require('./routes/index_routes');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -20,8 +22,13 @@ app.use(function (req, res, next) {
     next();
 });
 
-ConnectMongoDB();
+//Conect mongoDB
+connectMongoDB();
+
+//Routes 
+app.use(router);
 
 app.listen(port, async () => {
-    console.log(`API Server on port ${port}`);
+    const { fecha, hora } = await getDateAndTime();
+    console.log(`${fecha}, ${hora} API Server on port ${port}`);
 });

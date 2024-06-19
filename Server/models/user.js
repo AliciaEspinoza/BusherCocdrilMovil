@@ -8,6 +8,8 @@ const userModel = new schema({
     turno : { type : String, required : true, trim: true},
     password : { type : String, required : true, trim: true},
     usuario : { type : String, required : true, trim: true},
+    fecha_registro : { type : String, required : true, trim: true},
+    hora_registro : { type : String, required : true, trim: true},
     salario : { type : Number, required : true, trim: true},
 });
 
