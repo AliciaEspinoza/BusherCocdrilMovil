@@ -1,24 +1,27 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const authRouter = require("./routes/auth");
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const ConnectMongoDB = require('./db/db_config');
 const app = express();
+const port = process.env.PORT || 3000;
 
-app.use(express.json());
-app.use(authRouter);
+//Json settings
+app.use(bodyParser.json({limit : '5mb'}));
+app.use(bodyParser.urlencoded({limit: '5mb', extended : true}));
+app.use(bodyParser.json());
 
-const DB = "mongodb+srv://bushercocdrilscuautlacentro:E2TYnyOCtkKnL3iZ@clusterbusher.tbkralw.mongodb.net/base de datosbushercocdrils?retryWrites=true&w=majority&appName=clusterBusher";
+//Headers
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
+    next();
+});
 
-mongoose 
-.connect(DB)
-.then(() =>{
-    console.log("Conexion");
-})
-.catch((e) => {
-    console.log(e);
-})
+ConnectMongoDB();
 
-app.listen(PORT, "0.0.0.0", () =>{
-    console.log(`connected at port ${PORT}`);
+app.listen(port, async () => {
+    console.log(`API Server on port ${port}`);
 });
